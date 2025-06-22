@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SecureSign</title>
+    <link rel="stylesheet" href="css/styles2.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>SecureSign</h3>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active"><a href="dashboard.html">📋 Meus Documentos</a></li>
+                    <li><a href="assinar.html">🖋️ Assinar Documento</a></li>
+                    <li><a href="#">🔑 Minhas Chaves</a></li>
+                    <li><a href="#">⚙️ Configurações</a></li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="#" class="btn btn-outline btn-block">Sair</a>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="dashboard-content">
+            <header class="content-header">
+                <h2>Meus Documentos</h2>
+                <div class="actions">
+                    <button class="btn btn-primary">+ Novo Documento</button>
+                </div>
+            </header>
+            
+            <div class="documents-grid">
+                <!-- Document Card -->
+                <div class="document-card">
+                    <div class="document-icon">📄</div>
+                    <h3>Contrato de Serviços</h3>
+                    <p class="document-date">Assinado em: 15/05/2023</p>
+                    <div class="document-actions">
+                        <button class="btn btn-outline btn-small">Verificar</button>
+                        <button class="btn btn-outline btn-small">Download</button>
+                    </div>
+                </div>
+                
+                <!-- More document cards... -->
+            </div>
+        </main>
+    </div>
+
+    <script src="assets/js/dashboard.js"></script>
+</body>
+</html>
