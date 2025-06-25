@@ -1,7 +1,11 @@
-const dotenv =require('dotenv');
-const variaveisAmbiente = dotenv.config();
+const dotenv = require('dotenv');
 
-const {parsed: env} = variaveisAmbiente;
+// Carrega as variáveis de ambiente do arquivo .env
+dotenv.config();
 
-
-module.exports = env;
+module.exports = {
+  DBNAME: process.env.DBNAME,
+  DBUSER: process.env.DBUSER,
+  DBPASSWORD: process.env.DBPASSWORD,
+  DBHOST: process.env.DBHOST,
+};

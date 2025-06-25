@@ -1,58 +1,60 @@
-const {Sequelize}  = require('sequelize');
-const conexaoDB = require('../utils/database');
+const { Sequelize, DataTypes } = require('sequelize');
+const conexaoDB = require('../utils/database').conexaoDB;
 
-
+// Definição do modelo 'user'
 const user = conexaoDB.define('user', {
-    name: {
-        type: String,
-        required: true
-      },
-      email: {
-        type: Sequelize.STRING,
-        required: true,
-        unique: true
-      },
-      password: {
-        type: Sequelize.STRING,
-        required: true
-      },
-      nif: {
-        type: Sequelize.STRING,
-        required: true,
-        unique: true
-      },
-      digitalCertificate: {
-        type: Sequelize.STRING,
-        required: false // Será preenchido após cadastro do certificado
-      },
-      certificateExpiration: {
-        type: Date,
-        required: false
-      },
-      role: {
-        type: Sequelize.STRING,
-        enum: ['user', 'admin'],
-        default: 'user'
-      },
-      createdAt: {
-        type: Date,
-        default: Date.now
-      }
-    });
-    user.comparePassword = async function (email, password) {
-      const user = await this.findOne({ where: { email } });
-      if (!user) return false;
-    
-      const bcrypt = require('bcrypt');
-      return bcrypt.compare(password, user.password);
-    };  
-    /// Adicionando um hook para hash da senha antes de salvar
-  user.beforeCreate(async (userInstance) => {
-    const bcrypt = require('bcrypt');
-    userInstance.password = await bcrypt.hash(userInstance.password, 10);
-},
-  user.findByEmail = async function (email) {
-  return this.findOne({ where: { email } });
+  name: {
+    type: DataTypes.STRING, // Corrigido para usar DataTypes.STRING
+    allowNull: false, // Substitui 'required' por 'allowNull'
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  nif: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  digitalCertificate: {
+    type: DataTypes.STRING,
+    allowNull: true, // Substitui 'required: false' por 'allowNull: true'
+  },
+  certificateExpiration: {
+    type: DataTypes.DATE, // Corrigido para usar DataTypes.DATE
+    allowNull: true,
+  },
+  role: {
+    type: DataTypes.ENUM('user', 'admin'), // Corrigido para usar DataTypes.ENUM
+    defaultValue: 'user',
+  },
+  createdAt: {
+    type: DataTypes.DATE, // Corrigido para usar DataTypes.DATE
+    defaultValue: Sequelize.NOW, // Corrigido para usar Sequelize.NOW
+  },
 });
+
+// Adicionando métodos estáticos e hooks
+user.comparePassword = async function (email, password) {
+  const userInstance = await this.findOne({ where: { email } });
+  if (!userInstance) return false;
+
+  const bcrypt = require('bcrypt');
+  return bcrypt.compare(password, userInstance.password);
+};
+
+user.beforeCreate(async (userInstance) => {
+  const bcrypt = require('bcrypt');
+  userInstance.password = await bcrypt.hash(userInstance.password, 10);
+});
+
+user.findByEmail = async function (email) {
+  return this.findOne({ where: { email } });
+};
 
 module.exports = user;

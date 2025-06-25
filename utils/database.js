@@ -1,7 +1,7 @@
 const envs = require('./config')
-const sequelize = require('sequelize');
+const { Sequelize } = require('sequelize');
 
-const conexaoDB= new sequelize(
+const conexaoDB= new Sequelize(
     envs.DBNAME,
     envs.DBUSER,
     envs.DBPASSWORD,{
@@ -22,5 +22,4 @@ const inicializarDB = async () => {
       throw error;
     }
   };
-module.exports = conexaoDB;
-module.exports= inicializarDB;
+module.exports = { conexaoDB, inicializarDB };

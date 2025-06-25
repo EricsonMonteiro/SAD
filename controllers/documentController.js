@@ -11,6 +11,21 @@ class DocumentController {
       res.status(400).json({ error: error.message });
     }
   }
+
+  static async pesquisarDocumentos(req, res) {
+    try {
+      const { title, author } = req.query;
+      const filtros = {};
+
+      if (title) filtros.title = title;
+      if (author) filtros.author = author;
+
+      const documentos = await Document.findAll({ where: filtros });
+      res.status(200).json(documentos);
+    } catch (error) {
+      res.status(500).json({ erro: error.message });
+    }
+  }
 }
 
 module.exports = DocumentController;

@@ -68,7 +68,24 @@ const fazerLogin = async(req,res) => {
       res.status(500).json({erro: 'Erro do servidor'});
   }
 }
+
+const pesquisarUsuarios = async (req, res) => {
+  try {
+    const { nome, email } = req.query;
+    const filtros = {};
+
+    if (nome) filtros.nome = nome;
+    if (email) filtros.email = email;
+
+    const usuarios = await Utilizador.findAll({ where: filtros });
+    res.status(200).json(usuarios);
+  } catch (error) {
+    res.status(500).json({ erro: error.message });
+  }
+};
+
 module.exports = {
  registarUser,
- fazerLogin 
+ fazerLogin,
+ pesquisarUsuarios
 };

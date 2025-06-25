@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const  conexaoDB = require('../utils/database');
+const  conexaoDB = require('../utils/database').conexaoDB;
 const User = require('./user');
 //const Sequelize = require('sequelize');
 const Document = conexaoDB.define('Document', {

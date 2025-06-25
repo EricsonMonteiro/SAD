@@ -5,5 +5,6 @@ router.post('/registar',
     geriruser.registarUser);
 router.post('/login',
     geriruser.fazerLogin);
+router.get('/search', geriruser.pesquisarUsuarios);
  
  module.exports = router;
