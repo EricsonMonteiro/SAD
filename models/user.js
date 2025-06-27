@@ -3,6 +3,11 @@ const conexaoDB = require('../utils/database').conexaoDB;
 
 // Definição do modelo 'user'
 const user = conexaoDB.define('user', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true, // Gera automaticamente o valor do ID
+    primaryKey: true, // Define como chave primária
+  },
   name: {
     type: DataTypes.STRING, // Corrigido para usar DataTypes.STRING
     allowNull: false, // Substitui 'required' por 'allowNull'

@@ -1,14 +1,14 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const Utilizador = 
-require('../models/user');
+//const Utilizador = require('../models/user');
+const User = require('../models/user');
 
 const registarUser = async (req,res) => {
  try {
   const {nome, email, password, categoria} = req.body;
 
   //verificar se o email já está registado para outro
-  const utilizadorExistente = await Utilizador.findOne(
+  const utilizadorExistente = await User.findOne(
     {
       where: {
         email: `${email}`
@@ -21,11 +21,11 @@ const registarUser = async (req,res) => {
 
     const encPassword = await bcrypt.hash(password,10);
 
-    const novoUser = await Utilizador.create({
+    const novoUser = await User.create({
       nome,
       email,
       password: encPassword,
-      id_categoria: categoria
+      
     })
     res.status(201).json( {
       mensagem: "User criado",
@@ -43,7 +43,7 @@ const registarUser = async (req,res) => {
 const fazerLogin = async(req,res) => {
   try {
      const {email, password} = req.body;
-     const utilizadorExistente = await Utilizador.findOne(
+     const utilizadorExistente = await User.findOne(
       {
         where: {
           email: `${email}`
@@ -84,6 +84,29 @@ const pesquisarUsuarios = async (req, res) => {
   }
 };
 
+
+exports.registarUser = async (req, res) => {
+  const { name, email, password, nif, role } = req.body;
+
+  if (!name || !email || !password || !nif) {
+    return res.status(400).json({ error: 'Todos os campos são obrigatórios.' });
+  }
+
+  try {
+    const novoUsuario = await User.create({
+      name,
+      email,
+      password,
+      nif,
+      role: role || 'user', // Define o papel como 'user' por padrão
+    });
+
+    res.status(201).json({ message: 'Usuário registrado com sucesso!', user: novoUsuario });
+  } catch (error) {
+    console.error('Erro ao registrar usuário:', error);
+    res.status(500).json({ error: error.message, message: 'Erro ao criar usuário.' });
+  }
+};
 module.exports = {
  registarUser,
  fazerLogin,

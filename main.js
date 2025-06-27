@@ -31,7 +31,7 @@ servidor.get('/', (req, res) => {
 });
 
 // Inicialização do servidor
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3003;
 
 inicializarDB()
 .then( () => {
