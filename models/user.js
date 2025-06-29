@@ -1,5 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const conexaoDB = require('../utils/database').conexaoDB;
+const crypto = require('crypto');
 
 // Definição do modelo 'user'
 const user = conexaoDB.define('user', {
@@ -45,21 +46,58 @@ const user = conexaoDB.define('user', {
 });
 
 // Adicionando métodos estáticos e hooks
-user.comparePassword = async function (email, password) {
-  const userInstance = await this.findOne({ where: { email } });
-  if (!userInstance) return false;
-
-  const bcrypt = require('bcrypt');
-  return bcrypt.compare(password, userInstance.password);
-};
-
 user.beforeCreate(async (userInstance) => {
   const bcrypt = require('bcrypt');
+  console.log('Original password before hashing:', userInstance.password); // Log da senha original
   userInstance.password = await bcrypt.hash(userInstance.password, 10);
+  console.log('Hashed password:', userInstance.password); // Log da senha criptografada
 });
+
+user.comparePassword = async function (email, password) {
+  const userInstance = await this.findOne({ where: { email } });
+  if (!userInstance) {
+    console.log('User not found for email:', email); // Log caso o usuário não seja encontrado
+    return false;
+  }
+
+  const bcrypt = require('bcrypt');
+  console.log('Stored password:', userInstance.password); // Log da senha armazenada
+  console.log('Input password:', password); // Log da senha fornecida
+  const isMatch = await bcrypt.compare(password, userInstance.password);
+  console.log('Password match result:', isMatch); // Log do resultado da comparação
+  return isMatch;
+};
 
 user.findByEmail = async function (email) {
   return this.findOne({ where: { email } });
 };
 
+user.generateDigitalSignature = async function (data, privateKey) {
+  try {
+    const sign = crypto.createSign('SHA256');
+    sign.update(data);
+    sign.end();
+    const signature = sign.sign(privateKey, 'hex');
+    console.log('Generated digital signature:', signature); // Log da assinatura gerada
+    return signature;
+  } catch (error) {
+    console.error('Error generating digital signature:', error);
+    throw error;
+  }
+};
+
+// Método para verificar assinatura digital
+user.verifyDigitalSignature = async function (data, signature, publicKey) {
+  try {
+    const verify = crypto.createVerify('SHA256');
+    verify.update(data);
+    verify.end();
+    const isValid = verify.verify(publicKey, signature, 'hex');
+    console.log('Digital signature valid:', isValid); // Log da validade da assinatura
+    return isValid;
+  } catch (error) {
+    console.error('Error verifying digital signature:', error);
+    throw error;
+  }
+};
 module.exports = user;
