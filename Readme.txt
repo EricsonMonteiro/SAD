@@ -33,9 +33,25 @@ Este projeto é um sistema de assinatura digital desenvolvido em Node.js. Ele pe
    - Endpoint: `POST /users/register`
    - Permite que novos usuários se registrem.
 
+   ex: 
+   {
+  "name": "Ericson ",
+  "email": "monteiro@gmail.com",
+  "password": "2222",
+  "nif": "222222222",
+  "role": "user"
+}
+
 2. **Login de Usuários**:
    - Endpoint: `POST /users/login`
    - Autentica usuários e retorna um token JWT.
+   ex:
+   {
+  "email": "monteiro@gmail.com",
+  "password": "2222"
+}
+Mas essa parte nao funciona corretamente porque nao consegui corrigir a parte da senha
+que esta com problema na parte de criptografia.
 
 3. **Assinatura Digital**:
    - Gerar assinatura:
